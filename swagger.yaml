@@ -1,0 +1,144 @@
+swagger: '2.0'
+info:
+  description: 'Swagger demo application API'
+  version: '1.0.0'
+  title: 'Swagger demo application'
+basePath: '/api/v1'
+tags:
+  - name: 'Books'
+    description: 'API for books in the application'
+schemes:
+  - 'http'
+  - 'https'
+consumes:
+  - 'application/json'
+produces:
+  - 'application/json'
+paths:
+  /books:
+    post:
+      tags:
+        - Books
+      summary: 'Add a new book'
+      parameters:
+        - name: 'body'
+          in: 'body'
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: 'object'
+            properties:
+              code:
+                type: 'integer'
+                default: 200
+              data:
+                $ref: '#/definitions/Book'
+              errors:
+                type: 'object'
+                default: null
+    get:
+      tags:
+        - Books
+      summary: 'Get all books in the application'
+      parameters:
+        - name: 'page'
+          in: 'query'
+          description: 'Current page'
+          default: 1
+        - name: 'limit'
+          in: 'query'
+          description: 'Page size'
+          default: 20
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: 'object'
+            properties:
+              code:
+                type: 'integer'
+                default: 200
+              data:
+                type: 'object'
+                properties:
+                  list:
+                    type: 'array'
+                    items:
+                      $ref: '#/definitions/Book'
+                  total:
+                    type: 'integer'
+                  limit:
+                    type: 'integer'
+                    default: 20
+                  page:
+                    type: 'integer'
+                    default: 1
+                  totalPage:
+                    type: 'integer'
+                  hasPrevPage:
+                    type: 'boolean'
+                  hasNextPage:
+                    type: 'boolean'
+                  prevPage:
+                    type: 'integer'
+                  nextPage:
+                    type: 'integer'
+              errors:
+                type: 'object'
+                default: null
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: 'Get details of the book'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'ID of book to return'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: 'object'
+            properties:
+              code:
+                type: 'integer'
+                default: 200
+              data:
+                $ref: '#/definitions/Book'
+              errors:
+                type: 'object'
+                default: null
+        404:
+          description: 'Not Found'
+          schema:
+            type: 'object'
+            properties:
+              code:
+                type: 'integer'
+                default: 404
+              data:
+                default: null
+              errors:
+                type: 'object'
+                properties:
+                  message:
+                    type: 'string'
+definitions:
+  Book:
+    type: 'object'
+    properties:
+      name:
+        type: 'string'
+      authors:
+        type: 'array'
+        items:
+          type: 'string'
+      summary:
+        type: 'string'
